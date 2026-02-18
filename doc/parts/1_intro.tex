@@ -1,35 +1,35 @@
 \chapter{Introduzione}
 \label{chap:introduction}
 
-I satelliti scattano continuamente fotografie della Terra per controllare lo stato delle foreste, delle città e dei mari. Tuttavia, c'è un grosso problema naturale: le nuvole.
-Si stima che, in qualsiasi momento, circa il 67\% del nostro pianeta sia coperto da nubi. Questo significa che molto spesso, quando un satellite ottico (come una macchina fotografica normale) prova a scattare una foto, l'immagine risulta bianca e inutilizzabile.
+I satelliti \textbf{scattano continuamente fotografie} della Terra per controllare lo stato delle foreste, delle città e dei mari. Tuttavia, c'è un grosso problema naturale: le nuvole.
+Si stima che, in qualsiasi momento, circa il \textbf{67\% del nostro pianeta sia coperto da nubi}. Questo significa che quando si prova a scattare una foto, l'immagine risulta \textbf{bianca e inutilizzabile}.
 
 \begin{figure}[h]
     \centering
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{Images/nuvole_vs_nonuvole1.png}
-        \caption{Foto coperta dalle nuvole.}
+        \caption{Foto senza nuvole.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{Images/nuvole_vs_nonuvole2.png}
-        \caption{Foto senza nuvole.}
+        \caption{Foto con nuvole.}
     \end{subfigure}
-    \caption{Il problema: a sinistra una foto inutile coperta dalle nuvole, a destra quello che vorremmo vedere.}
+    \caption{Il problema: a sinistra quello che vorremmo vedere, a destra una foto inutile coperta dalle nuvole}
     \label{fig:cloud_problem}
 \end{figure}
 
 \section{Perché è importante rimuoverle?}
 Non è solo una questione estetica. Vedere cosa c'è sotto le nuvole è fondamentale per scopi pratici:
 \begin{itemize}
-    \item \textbf{Agricoltura:} Gli agricoltori devono controllare la crescita delle piante ogni settimana. Se per un mese è nuvoloso, perdono dati preziosi sul raccolto.
     \item \textbf{Disastri Naturali:} Durante alluvioni o uragani il cielo è quasi sempre coperto. Senza una tecnologia che "vede attraverso" le nuvole, i soccorritori non possono sapere quali zone sono allagate.
+    \item \textbf{Intelligence:} La \textbf{lotta alla pesca illegale e al contrabbando} dipende dalla capacità di tracciare le navi che spengono i sistemi di identificazione. Senza la rimozione delle nuvole, \textbf{vaste porzioni di oceano diventano "zone cieche"} dove le attività illecite possono proliferare indisturbate.
 \end{itemize}
 
 \section{Le Sfide: Perché è difficile?}
-Cancellare una nuvola non è semplice come usare una gomma su un foglio, per tre motivi principali:
+Cancellare una nuvola non è semplice per tre motivi principali:
 \begin{enumerate}
     \item \textbf{Spessore:} Alcune nuvole sono leggere (si vede un po' sotto), altre sono muri bianchi invalicabili.
     \item \textbf{Ombre:} Le nuvole proiettano ombre scure sul terreno. Anche se togliamo la nuvola, l'ombra nera rimane e falsa i colori della foto.
@@ -37,30 +37,29 @@ Cancellare una nuvola non è semplice come usare una gomma su un foglio, per tre
 \end{enumerate}
 
 \section{Approccio alla Soluzione}
-Per ricostruire le parti dell'immagine nascoste dalle nuvole, una singola fotografia non basta. Dobbiamo recuperare le informazioni mancanti attingendo da fonti esterne e scegliendo una strategia precisa.
 
 Abbiamo diversi strumenti a disposizione:
 \begin{itemize}
-    \item \textbf{Il Tempo (Approccio Multi-temporale):} Sfruttiamo il fatto di avere 30 foto della stessa zona scattate in giorni diversi. Se oggi è nuvoloso, probabilmente la settimana scorsa (o quella successiva) non lo era. Unendo i "pezzi puliti" di giorni diversi, possiamo ricostruire il puzzle completo.
-    \item \textbf{Il Radar (Approccio Multi-modale):} Integriamo i dati dei satelliti Sentinel-1. A differenza delle macchine fotografiche ottiche, il Radar usa onde radio che attraversano le nuvole senza problemi, fornendoci sempre una traccia della struttura del terreno sottostante.
+    \item \textbf{Tempo:} Sfruttiamo il fatto di avere diverse foto della stessa zona scattate in giorni diversi. Se oggi è nuvoloso, probabilmente la settimana scorsa (o quella successiva) non lo era. Unendo i "pezzi puliti" di giorni diversi, possiamo ricostruire il puzzle completo.
+    \item \textbf{Radar:} Integriamo i dati dei satelliti Sentinel-1. A differenza delle macchine fotografiche ottiche, il Radar \textbf{usa onde radio} che attraversano le nuvole senza problemi, \textbf{fornendoci la struttura del terreno sottostante}.
 \end{itemize}
 
 \subsection{La Strategia}
-Una volta raccolti i dati, dobbiamo decidere come usarli. Nel campo dell'Intelligenza Artificiale ci sono due strade principali:
+Dobbiamo decidere come usare questi dati, ci sono due strade principali:
 
 \begin{itemize}
-    \item \textbf{Sequence-to-Sequence (Seq2Seq):} Si cerca di ripulire \textit{tutte} le 30 immagini della serie. È un compito difficilissimo e molto lento, perché il computer deve generare una quantità enorme di dati.
-    \item \textbf{Sequence-to-Point (Seq2Point):} Si usano tutte le 30 immagini (nuvolose e radar) per concentrare le informazioni su \textbf{un solo scatto finale} (il target).
+    \item \textbf{Sequence-to-Point (Seq2Point):} Si usano tutte le $N$ immagini scattate in istanti temporali diversi per concentrare le informazioni su \textbf{un solo scatto finale} (il target).
+    \item \textbf{Sequence-to-Sequence (Seq2Seq):} Si cerca di ripulire \textit{tutte} le $N$ immagini della serie.
 \end{itemize}
 
-In questo progetto abbiamo scelto la strategia \textbf{Seq2Point} perché è la più pratica ai fini dimostrativi e permette di focalizzarci sulla qualità del risultato finale, senza doverci preoccupare di ricostruire ogni singola immagine della serie.
+In questo progetto abbiamo scelto la strategia \textbf{Seq2Point} perché è la più pratica ai \textbf{fini dimostrativi} e permette di focalizzarci sulla qualità del risultato finale, senza doverci preoccupare di ricostruire ogni singola immagine della serie.
 
 \section{Obiettivo del Progetto}
 L'obiettivo di questa tesi è esplorare lo stato dell'arte delle tecniche di \textit{Cloud Removal} applicate al dataset \textbf{SEN12MS-CR-TS}.
 
-Il lavoro si concentra sull'implementazione diretta e sulla valutazione comparativa di tre metodologie di ricostruzione:
+Valuteremo:
 \begin{enumerate}
-    \item \textbf{Least Cloudy Selection (Baseline 1):} Un metodo di selezione che individua l'acquisizione temporale con la minor copertura nuvolosa.
-    \item \textbf{Temporal Mosaicing (Baseline 2):} Una tecnica statistica che sfrutta la mediana temporale per fondere più acquisizioni e rimuovere gli outlier (nuvole).
-    \item \textbf{Deep Learning Multi-modale:} Test tramite inferenza di un approccio ResNet-based \cite{MERANER2020333} che sfrutta la fusione di dati Ottici e Radar (SAR). Per modelli più sofisticati, come il SOTA proposto in \cite{UnCRtainTS}, ci si limiterà a citarne le metriche di riferimento.
+    \item \textbf{Least Cloudy Selection (Baseline 1):} Un metodo di selezione che individua l'acquisizione temporale con la \textbf{minor copertura nuvolosa}.
+    \item \textbf{Temporal Mosaicing (Baseline 2):} Una tecnica statistica che sfrutta la \textbf{media temporale} per fondere più acquisizioni e rimuovere gli outlier (nuvole).
+    \item \textbf{Deep Learning Multi-modale:} Test tramite inferenza di un approccio ResNet-based \cite{MERANER2020333} che sfrutta la \textbf{fusione di dati Ottici e Radar}.
 \end{enumerate}

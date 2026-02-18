@@ -1,13 +1,13 @@
 \chapter{Dataset: SEN12MS-CR-TS\cite{sen12mscrts}}
 \label{chap:dataset}
 
-Si tratta di un benchmark pubblico su larga scala, curato dai ricercatori della Technical University of Munich (TUM), progettato specificamente per sviluppare algoritmi di ricostruzione di immagini satellitari e rimozione delle nuvole.
+Si tratta di un dataset, curato dai ricercatori della \textbf{Technical University of Munich (TUM)}, progettato specificamente per sviluppare algoritmi di ricostruzione di immagini satellitari e \textbf{rimozione delle nuvole}.
 
 \section{Caratteristiche e Composizione}
-Il dataset è definito "multi-modale" in quanto fornisce, per ogni area geografica, dati provenienti da due diverse costellazioni satellitari del programma europeo Copernicus, perfettamente allineati spazialmente:
+Il dataset è \textbf{definito "multi-modale"} in quanto fornisce i seguenti dati:
 
 \begin{itemize}
-    \item \textbf{Sentinel-1 (Radar):} Funziona come un "radar" che attraversa le nuvole e la pioggia. Non scatta una foto a colori, ma rileva la forma e la consistenza del terreno, fornendo un'immagine sempre nitida anche con il brutto tempo.
+    \item \textbf{Sentinel-1 (Radar):} Funziona come un radar che attraversa le nuvole. Non scatta una foto a colori, ma \textbf{rileva la forma e la consistenza del terreno}, fornendo un'immagine sempre nitida anche con il brutto tempo.
     \item \textbf{Sentinel-2 (Ottico):} Funziona come una normale fotocamera. Scatta foto a colori molto dettagliate, ma viene bloccato dalle nuvole: se il cielo è coperto, l'immagine mostra solo bianco.
 \end{itemize}
 
@@ -27,7 +27,7 @@ Il dataset completo è accessibile pubblicamente tramite i repository della TU M
 \end{itemize}
 
 \section{Copertura Globale e Struttura Temporale}
-Il dataset copre diverse regioni del globo distribuite su tutti i continenti, includendo una vasta variabilità di biomi (foreste, deserti, aree urbane, ghiacci) e stagioni (inverno, estate, stagioni delle piogge).
+Il dataset copre diverse regioni del globo distribuite su tutti i continenti, includendo una \textbf{vasta  variabilità di biomi} (foreste, deserti, aree urbane, ghiacci) \textbf{e stagioni} (inverno, estate, stagioni delle piogge).
 
 \begin{figure}[h]
     \centering
@@ -36,15 +36,15 @@ Il dataset copre diverse regioni del globo distribuite su tutti i continenti, in
     \label{fig:dataset_map}
 \end{figure}
 
-La caratteristica distintiva della versione "TS" (\textit{Time Series}) è la dimensione temporale. Per ogni singola patch (ROI - Region of Interest), il dataset fornisce una sequenza di \textbf{30 acquisizioni} scattate in momenti diversi.
-
 \section{Struttura}
+La caratteristica distintiva è la \textbf{dimensione temporale}. Per ogni singola patch, il dataset fornisce una sequenza di \textbf{30 acquisizioni} scattate in momenti diversi.
+
 I file seguono la seguente struttura:
 \begin{itemize}
-    \item \textbf{Dominio del Sensore (\texttt{S1} / \texttt{S2})}: Il primo livello distingue la tipologia di sensore usato
+    \item \textbf{Dominio del Sensore (\texttt{S1} / \texttt{S2})}: Tipologia di sensore usato
     \item \textbf{Area Geografica (\texttt{ROIs[ID]})}: posizione geografica (Region of Interest)
-    \item \textbf{Dimensione Temporale (\texttt{0} -- \texttt{29})}: Le 30 cartelle numerate corrispondono ai diversi \textit{timestep}; ciascuna contiene un'acquisizione della stessa area in un istante temporale distinto, permettendo di analizzare l'evoluzione delle nuvole e della superficie.
-    \item \textbf{Frammentazione Spaziale (\textit{Patch})}: Rilevazioni identificate da un numero progressivo (es. \texttt{patch\_0}, \texttt{patch\_1}, ..., \texttt{patch\_299}).
+    \item \textbf{Dimensione Temporale (\texttt{0} -- \texttt{29})}
+    \item \textbf{Frammentazione Spaziale (\textit{Patch})}
 \end{itemize}
 
 Di seguito una rappresentazione
@@ -62,7 +62,7 @@ Di seguito una rappresentazione
 \end{verbatim}
 
 \section{Sottoinsieme di studio: AsiaWest}
-Il dataset completo occupa diversi Terabyte, dimensione eccessiva per il lavoro che andremo ad effettuare. Per questo motivo è stata scelta la ROI \textbf{asiaWest\_test}, in quanto è la più leggera tra quelle disponibili (circa \textbf{24,8 GB}) e permette di lavorare in tempi ragionevoli pur offrendo una buona varietà di paesaggi e nuvole. Questo gruppo di dati è stato poi diviso per gli esperimenti: l'80\% delle immagini è stato usato per istruire il modello, mentre il restante 20\% è servito per testare la qualità dei risultati ottenuti.
+Il dataset completo \textbf{occupa diversi Terabyte}. Per questo motivo è stata scelta la ROI \textbf{asiaWest\_test}, in quanto è la più leggera tra quelle disponibili (circa \textbf{24,8 GB}) e permette di lavorare in tempi ragionevoli pur offrendo una buona varietà di paesaggi e nuvole.
 \begin{figure}[h]
     \centering
     \begin{subfigure}{0.32\textwidth}

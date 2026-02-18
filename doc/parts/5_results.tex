@@ -1,25 +1,25 @@
 \chapter{Results}
 I risultati ottenuti sono stati valutati utilizzando le metriche presenti nel paper ovvero:
 \begin{itemize}
-    \item \textbf{NRMSE (Normalized Root Mean Squares Error) $\downarrow$ :} Misura la differenza media quadratica tra i pixel dell'immagine predetta e quelli dell'immagine reale, normalizzata.
+    \item \textbf{NRMSE (Normalized Root Mean Squares Error) $\downarrow$ :} Misura la \textbf{differenza media quadratica tra i pixel} dell'immagine predetta e quelli dell'immagine reale, normalizzata.
     \begin{itemize}
         \item \textbf{Valore basso:} indica che la predizione è molto accurata e vicina all'originale.
         \item \textbf{Valore alto:} segnala un errore di ricostruzione elevato.
     \end{itemize}
     
-    \item \textbf{PSNR (Peak Signal-to-Noise Ratio) $\downarrow$ :}
+    \item \textbf{PSNR (Peak Signal-to-Noise Ratio) $\uparrow$ :} Rapporto tra il valore massimo possibile di un pixel e l'errore medio quadratico tra l'immagine predetta e quella reale.
     \begin{itemize}
         \item \textbf{Valore alto:} indica un'immagine di alta qualità con poco rumore.
-        \item \textbf{Valore basso:} denota una forte presenza di distorsioni o artefatti matematici.
+        \item \textbf{Valore basso:} denota una forte presenza di distorsioni o artefatti
     \end{itemize}
     
-    \item \textbf{SSIM (Structural Similarity Index) $\uparrow$:} Confronta l'immagine predetta e quella target valutandone la luminanza, il contrasto e la struttura spaziale. Serve a stimare la qualità della ricostruzione in modo simile a come la percepirebbe l'occhio umano.
+    \item \textbf{SSIM (Structural Similarity Index) $\uparrow$:} Confronta l'immagine predetta e quella target valutandone la luminanza, il contrasto e la struttura spaziale. Serve a stimare la \textbf{qualità} della ricostruzione in modo \textbf{simile a come la percepirebbe l'occhio umano}.
     \begin{itemize}
         \item \textbf{Valore alto (vicino a 1):} significa che la struttura visiva e i dettagli sono stati preservati fedelmente.
         \item \textbf{Valore basso:} indica la perdita di geometrie e la presenza di sfocature o artefatti visibili.
     \end{itemize}
     
-    \item \textbf{SAM (Spectral Angle Mapper):} Calcola l'angolo tra le bande multispettrali di due immagini, trattandole come vettori in uno spazio n-dimensionale. Serve a valutare unicamente la fedeltà delle firme spettrali e dei colori, ignorando le differenze di illuminazione.
+    \item \textbf{SAM (Spectral Angle Mapper):} Calcola \textbf{l'angolo tra le bande multispettrali} di due immagini, trattandole come vettori in uno spazio n-dimensionale. Serve a valutare unicamente la fedeltà delle firme spettrali e dei colori, ignorando le differenze di illuminazione.
     \begin{itemize}
         \item \textbf{Valore basso:} indica un'altissima fedeltà cromatica e spettrale.
         \item \textbf{Valore alto:} significa che i colori o le firme spettrali sono stati alterati.
@@ -40,7 +40,7 @@ I risultati ottenuti sono stati valutati utilizzando le metriche presenti nel pa
      & NRMSE ($\downarrow$) & PSNR ($\uparrow$) & SSIM ($\uparrow$) & SAM ($\downarrow$) &
        NRMSE ($\downarrow$) & PSNR ($\uparrow$) & SSIM ($\uparrow$) & SAM ($\downarrow$) \\
     \hline
-    Least Cloudy  & 0.0790 & \textbf{31.68} & 0.8150 & 0.213 & \textbf{0.0375} & \textbf{30.90} & \textbf{0.8653} & 0.151 \\
+    Least Cloudy  & 0.0790 & \textbf{31.68} & 0.8150 & 0.213 & \textbf{0.0375} & \textbf{32.73} & \textbf{0.8653} & 0.151 \\
     Mosaicing      & 0.0640 & 26.04 & 0.8110 & 0.250 & 0.0422 & 27.94 & 0.8338 & 0.155 \\
     ResNet         & 0.0600 & 25.42 & 0.8100 & 0.212 & 0.0623 & 25.90 & 0.8518 & \textbf{0.103} \\
     UnCRtainTS     & \textbf{0.0510} & 26.68 & \textbf{0.8360} & \textbf{0.186} &   --   &   --   &   --   &   --   \\
@@ -53,8 +53,7 @@ I risultati ottenuti sono stati valutati utilizzando le metriche presenti nel pa
 
 \textbf{Analisi dei Risultati}
 \begin{itemize}
-    \item \textbf{Incidenza della copertura nuvolosa:} Il dataset globale presenta un'occlusione media vicina al 50\%. Il subset selezionato ha una densità di nuvole inferiore. Al diminuire della percentuale di nuvole, l'errore (NRMSE) si abbassa drasticamente e la similarità strutturale (SSIM) sale in modo fisiologico per tutti i metodi.
-    \item \textbf{Omogeneità delle zone campionate (ROI):} L'area presa in esame presenta poca varianza delle località (costa, città, collina). In questi contesti, tecniche euristiche come il Mosaicing riescono a produrre risultati visivamente e metricamente superiori, limitando la generazione di artefatti.
-    \item \textbf{Comportamento del Least Cloudy:} Il picco di PSNR ottenuto sul subset (30.90) dall'approccio Least Cloudy è atteso. In scenari con porzioni di cielo limpido o nuvolosità sparsa, mantenere i pixel originali inalterati dell'immagine meno nuvolosa minimizza il rumore matematico assoluto (avvantaggiando il PSNR) rispetto all'uso di reti generative.
-    \item \textbf{Fedeltà spettrale della ResNet:} Analizzando il SAM (0.103), emerge chiaramente la validità del modello ResNet. Su questo subset, la rete neurale dimostra una capacità di preservazione delle firme spettrali originali nettamente superiore rispetto alle euristiche di base.
+    \item \textbf{Metriche migliori nel subset:} Le prestazioni di ricostruzione dell'immagine \textbf{dipendono fortemente dalla percentuale di copertura nuvolosa}. Ottenere metriche migliori in questo specifico subset è uno scenario sensato, poiché riflette una \textbf{minore percentuale media di copertura nuvolosa} che rende il task di rimozione intrinsecamente meno complesso. Si nota anche dal fatto che \textbf{l'approccio "least cloudy" ottiene risultati eccellenti nel subset}, confermando l'ipotesi.
+    \item \textbf{Fedeltà spettrale della ResNet:} Analizzando il SAM (0.103), emerge chiaramente la validità del modello ResNet. Su questo subset, la rete neurale dimostra una \textbf{capacità di preservazione delle firme spettrali originali nettamente superiore} rispetto alle euristiche di base, a conferma del fatto che gli approcci basati sul deep learning superano le soluzioni banali nella ricostruzione delle informazioni.
+    \item \textbf{Least cloudy migliore sul PSNR nel paper:} Il fatto che l'euristica "least cloudy" ottenga il PSNR in generaleindica che, in termini di rapporto segnale-rumore valutato sull'intera immagine, copiare i pixel inalterati dell'osservazione meno nuvolosa risulta la \textbf{strategia meno rumorosa}. \textbf{I modelli generativi} o i metodi di media (come il mosaicing), pur riuscendo a ricostruire le aree coperte da nubi, \textbf{tendono a introdurre inevitabili artefatti}, sfocature o alterazioni cromatiche nelle zone già limpide. Di conseguenza, il "least cloudy" massimizza il PSNR \textbf{semplicemente preservando intatta la qualità originale dell'immagine sorgente}.
 \end{itemize}

@@ -2,6 +2,7 @@
 
 Si affrontano le seguenti fasi:
 \begin{itemize}
+    \item Creazione Ground Truth
     \item Implementazioni baseline
     \item Inferenza DSen2-CR
 \end{itemize}
@@ -10,7 +11,7 @@ Si affrontano le seguenti fasi:
 
 A causa delle limitazioni dell'hardware locale gli esperimenti sono stati migrati su \textbf{Google Colab}.
 
-Non potendo disporre di un target nativamente esente da nuvole. Come indicano gli autori del paper \cite{sen12mscrts} è necessario l'uso del modello \textit{s2cloudless} \cite{s2cloudless}. Quest'ultimo genera una maschera binaria i cui pixel assumono valori nell'insieme $\{0, 1\}$, indicando rispettivamente le aree prive di copertura nuvolosa e quelle coperte da nuvole.
+Non potendo disporre di un target nativamente esente da nuvole. Come indicano gli autori del paper \cite{sen12mscrts} è necessario l'uso del modello \textit{s2cloudless} \cite{s2cloudless}. Quest'ultimo \textbf{genera una maschera binaria} i cui pixel assumono valori nell'insieme $\{0, 1\}$, \textbf{indicando} rispettivamente le \textbf{aree prive di copertura nuvolosa e quelle coperte da nuvole}.
 
 l'algoritmo ha esaminato tutti i 30 \textit{timestep} di ciascuna porzione spaziale, isolando il riferimento ottimale e salvando i risultati come segue:
 
@@ -33,8 +34,10 @@ I metadati registrati per ciascuna patch descrivono metriche fondamentali per la
 \begin{itemize}
     \item \textbf{\texttt{reference\_timestep}}: timestemp in cui si trova
     \item \textbf{\texttt{cloud\_fraction}}: rappresenta il rapporto di copertura nuvolosa calcolato pixel per pixel dal rilevatore. Un valore pari a $0.0$ certifica l'assenza totale di formazioni nuvolose.
-    \item \textbf{\texttt{processing\_time}}: riporta il tempo computazionale (espresso in secondi.
+    \item \textbf{\texttt{processing\_time}}: riporta il tempo computazionale (espresso in secondi).
 \end{itemize}
+
+Usando la CPU di colab \textbf{ogni patch} ha richiesto circa \textbf{1 minuto} in media per essere processata. Il \textbf{tempo totale} per l'elaborazione di tutte le patch è stato di circa \textbf{5 ore} (300 patch).
 
 \subsection{Metodi}
 
@@ -42,7 +45,7 @@ I metadati registrati per ciascuna patch descrivono metriche fondamentali per la
 L'approccio di base più semplice
 \begin{itemize}
     \item Data una patch analizza tutti i giorni a meno di quello GT.
-    \item Tra le patch rimanenti, il metodo seleziona quella con la minore copertura nuvolosa usando \textit{s2cloudless} \cite{s2cloudless}.
+    \item Tra le patch rimanenti, il metodo \textbf{seleziona quella con la minore copertura nuvolosa} usando \textit{s2cloudless} \cite{s2cloudless}.
 \end{itemize}
 
 \begin{table}[htbp]
@@ -111,7 +114,7 @@ Si lavora sul valore del pixel nel tempo:
 
 \subsubsection{DSen2-CR \cite{MERANER2020333}}
 
-Viene fatto uso di residual network (ResNet). Queste si basano sull'utilizzo di connessioni dirette, chiamate "scorciatoie" (shortcut), che saltano alcuni strati computazionali per trasportare le informazioni verso le parti inferiori della rete.
+Si usano le \textbf{residual network (ResNet)}. Queste si basano sull'utilizzo di connessioni dirette, chiamate "scorciatoie" (shortcut), \textbf{che saltano alcuni strati computazionali} per trasportare le informazioni verso le parti inferiori della rete.
 
 \begin{figure}[h]
     \centering
@@ -137,10 +140,22 @@ Questo comportamento è cruciale, potremmo avere infatti:
     \label{fig:dsenarch}
 \end{figure}
 
+\FloatBarrier
+
+Viene usata Cloud-Adaptive Regularized Loss (CARL):
+\begin{itemize}
+    \item Nelle \textbf{zone nuvolose} si valuta l'errore confrontando la predizione con l'immagine \textbf{target}, in modo da forzare la ricostruzione delle regioni occluse.
+    \item Nelle \textbf{zone serene} si valuta l'errore confrontando la predizione con l'immagine di \textbf{input} stessa, preservando i pixel già puliti.
+\end{itemize}
+
+Questo approccio costringe la rete a \textbf{non alterare i pixel già puliti}, preservando le informazioni originali ed evitando distorsioni dovute a fusioni multi-temporali.
+
+\FloatBarrier
+
 \vspace{1em}
 \subsubsection*{Hardware e Setup di Inferenza}
 
-Non è stato possibile eseguire l'inferenza su servizi cloud come Google Colab. Il tempo di compilazione del piano gratuito era esaurito. 
+Non è stato possibile eseguire l'inferenza su servizi cloud come Google Colab. Il \textbf{tempo di compilazione era esaurito}. 
 
 L'esecuzione è stata quindi spostata su hardware locale più potente di quello personale:
 \begin{itemize}
@@ -151,7 +166,7 @@ L'esecuzione è stata quindi spostata su hardware locale più potente di quello 
 
 Il limite principale è stato proprio la scheda video integrata. Mancando il supporto CUDA, non è stata possibile l'accelerazione hardware.
 
-L'obiettivo iniziale era processare l'intero dataset preso in esame (asiaWest). Tuttavia, la stima dei tempi superava le 40 ore. Il dataset di valutazione è stato quindi ridimensionato. L'analisi è stata limitata alle prime \textbf{50 patch}, per un totale di circa \textbf{1450 immagini}. Questa mole di dati ha comunque richiesto \textbf{oltre 6 ore} di elaborazione parallela.
+L'obiettivo iniziale era processare l'intero dataset preso in esame (asiaWest). Tuttavia, la stima dei tempi \textbf{superava le 40 ore}. Il dataset di valutazione è stato quindi \textbf{ridimensionato}. L'analisi è stata limitata alle prime \textbf{50 patch}, per un totale di circa \textbf{1450 immagini}. Questa mole di dati ha comunque richiesto \textbf{oltre 6 ore} di elaborazione parallela.
 
 \vspace{1em}
 \subsubsection*{Analisi dei Risultati e Selezione dell'Immagine}
@@ -170,8 +185,8 @@ output/
 └── 49/
 \end{verbatim}
 
-
-Per ogni patch erano disponibili circa 29 immagini. È stata effettuata una selezione automatizzata per trovare il miglior risultato di rimozione nuvolosa. Tramite la libreria \texttt{s2cloudless}, è stata calcolata la copertura nuvolosa residua. L'immagine finale scelta è stata quella con la minore frazione di nuvole (\textit{Least Cloudy}).
+Per ogni patch sono disponibili le relative predizioni per timestep.
+È stato applicato l'approccio \textbf{Least Cloudy} per selezionare il candidato migliore.
 
 \begin{figure}[h]
     \centering
