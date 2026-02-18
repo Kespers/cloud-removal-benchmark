@@ -20,7 +20,7 @@ Utilizza il notebook Jupyter fornito per scaricare il dataset di test (ROIs1868)
 3. Verifica che la cartella `dataset/` contenga le sottocartelle `s1_asiaWest_test` e `s2_asiaWest_test` e il file `ground_truths.json`.
 
 ### 3. Setup dei Pesi del Modello
-Scarica i pesi pre-addestrati e posizionali in `evaluation/checkpoints/`:
+Scarica i pesi pre-addestrati [qui](https://drive.google.com/file/d/1L3YUVOnlg67H5VwlgYO9uC9iuNlq7VMg/view) e posizionali in `evaluation/checkpoints/`:
 - File richiesto: `dsen2cr_carl_weights.hdf5`
 - Percorso: `evaluation/checkpoints/dsen2cr_carl_weights.hdf5`
 
