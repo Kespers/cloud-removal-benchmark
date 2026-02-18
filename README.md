@@ -3,6 +3,8 @@
 
 Questa repository contiene il codice per il progetto finale del corso di [Multimedia](https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791).
 
+[Clicca qui](https://github.com/Kespers/cloud-removal-benchmark/blob/main/doc/document.pdf) per consultare la relazione finale.
+
 ## Setup
 
 ### 1. Clone modello per inferenza

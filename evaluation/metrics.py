@@ -8,7 +8,7 @@ from skimage.metrics import structural_similarity as ssim
 import argparse
 
 # Constants
-SCALE = 2000.0 # Normalization scale for metrics (assuming 0-1 range for metrics input)
+SCALE = 2000.0
 
 def safe_divide(n, d):
     return n / d if d != 0 else 0
@@ -17,14 +17,6 @@ def load_image(path):
     if not os.path.exists(path):
         return None
     with rasterio.open(path) as src:
-        # Read standard bands (RGB or all?)
-        # Metrics defined on "x, y compared via their respective pixel values xc,h,w... dimensions C=3"
-        # The prompt says C=3. So we should use RGB bands? Or all bands?
-        # "dimensions C = 3, H = W = 256"
-        # We will use the main 3 bands (RGB) for consistency with the formula description.
-        # But for remote sensing, usually SAM is on all bands.
-        # Let's stick to C=3 as requested in the formula description.
-        # RGB bands are usually 4, 3, 2 (indices 3, 2, 1)
         
         try:
              # Try standard S2 indices for RGB
@@ -68,16 +60,6 @@ def calculate_ssim(x, y):
     return ssim(x_t, y_t, channel_axis=-1, data_range=1.0)
 
 def calculate_sam(x, y):
-    # Spectral Angle Mapper
-    # SAM = arccos( (x . y) / (norm(x) * norm(y)) )
-    # This is usually pixel-wise. The formula shows sums?
-    # "sum_{c=h=w=1}^{C,H,W} ..." -> This implies a single scalar for the whole image?
-    # "SAM measure is a third image-level metric... provides the spectral angle between the bands"
-    # Wait, usually SAM is pixel-wise spectral angle, then averaged.
-    # The formula provided:
-    # SAM(x, y) = arccos( (sum_all x*y) / sqrt(sum_all x^2 * sum_all y^2) )
-    # This formula treats the entire image (C*H*W vector) as one vector and calculates angle between them.
-    # This is "Global SAM". Okay, I will implement exactly this formula.
     
     numerator = np.sum(x * y)
     denom = np.sqrt(np.sum(x**2) * np.sum(y**2))
@@ -87,13 +69,7 @@ def calculate_sam(x, y):
         
     val = numerator / denom
     val = np.clip(val, -1, 1) # Numerical stability
-    return np.degrees(np.arccos(val)) # Result in degrees usually, or radians?
-    # Formula has cos^-1. Usually returns radians. 
-    # "spectral angle".
-    # I'll return radians as arccos usually does, unless degrees are specified.
-    # Let's return Radians to be safe, easier to convert.
-    
-    return np.arccos(val)
+    return np.degrees(np.arccos(val))
 
 def main():
     parser = argparse.ArgumentParser()

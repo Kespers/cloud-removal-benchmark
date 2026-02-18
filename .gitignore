@@ -484,4 +484,5 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,latex
 
 
-dataset
+dataset/s1_asiaWest_test
+dataset/s2_asiaWest_test

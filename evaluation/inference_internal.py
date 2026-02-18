@@ -19,8 +19,6 @@ CLIP_MAX = [[0, 0], [10000]*13, [10000]*13]
 
 def preprocess_sar(image_data):
     # image_data: (C, H, W)
-    # We expect 2 channels for SAR (VV, VH) usually? 
-    # The file checks for 2 channels.
     c_min = CLIP_MIN[0]
     c_max = CLIP_MAX[0]
     new_img = np.zeros_like(image_data, dtype=np.float32)
@@ -36,7 +34,6 @@ def preprocess_sar(image_data):
 
 def preprocess_opt(image_data):
     # image_data: (C, H, W)
-    # Type 3 (Cloudy Input)
     c_min = CLIP_MIN[2]
     c_max = CLIP_MAX[2]
     new_img = np.zeros_like(image_data, dtype=np.float32)
@@ -97,8 +94,6 @@ def main():
 
     print("Building Model...")
     # Input shape: ((13, h, w), (2, h, w))
-    # Note: s1_data might have different channels? Assume 2.
-    # s2_data must have 13.
     model, _ = DSen2CR_model(((s2_data.shape[0], h, w), (s1_data.shape[0], h, w)), 
                              batch_per_gpu=1, 
                              num_layers=16,
@@ -113,8 +108,6 @@ def main():
     prediction = model.predict([s2_input, s1_input])
     
     # Post-process
-    # prediction[0] is (C_out, H, W)
-    # Channels: 0-12 are corrected image.
     pred_img = prediction[0, :13, :, :]
     pred_img *= SCALE
     
