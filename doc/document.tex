@@ -10,9 +10,12 @@
 
 \usepackage{graphicx}
 \usepackage[font=small,labelfont=bf,tableposition=top]{caption}
-
+\usepackage{subcaption}
+\usepackage{graphicx}
 \usepackage{listings}
   \usepackage{courier}
+  \usepackage{pmboxdraw}
+  \usepackage{placeins}
  \lstset{
          language=C++,
          basicstyle=\footnotesize\ttfamily,
@@ -61,7 +64,6 @@
 \tableofcontents
 
 \input{parts/1_intro.tex}
-\input{parts/2_method.tex}
 \input{parts/3_dataset.tex}
 \input{parts/4_experiments.tex}
 \input{parts/5_results.tex}

@@ -1,0 +1,8 @@
+\chapter*{Conclusion}
+
+\begin{itemize}
+    \item \textbf{Efficienza in condizioni ottimali:} Le euristiche di base, come Least Cloudy e Mosaicing, offrono prestazioni notevoli in termini di riduzione del rumore assoluto (PSNR elevato) quando applicate a scenari con scarsa nuvolosità o elevata omogeneità territoriale. Rappresentano una scelta pragmatica e conveniente esclusivamente se si opera su serie storiche che includono già numerose osservazioni a cielo sereno.
+    \item \textbf{Robustezza e fedeltà spettrale:} I modelli basati su reti neurali, come l'approccio ResNet, garantiscono una conservazione nettamente superiore delle firme spettrali e cromatiche originali. Sono necessari per applicazioni a valle (come classificazione o segmentazione) in cui l'accuratezza spettrale è una priorità assoluta.
+    \item \textbf{Scelta per scenari complessi:} Quando le singole osservazioni temporali presentano nubi dense e ampie che oscurano completamente il suolo, le soluzioni triviali falliscono in modo critico. In questi casi, è indispensabile l'utilizzo di reti neurali in grado di integrare dati multimodali (SAR-ottico) e multitemporali per ricostruire le informazioni mancanti.
+    \item \textbf{Approccio definitivo:} Per un monitoraggio satellitare continuo, robusto e completamente automatizzato, architetture avanzate di deep learning rappresentano la soluzione migliore. Esse superano costantemente le euristiche nella maggior parte delle metriche globali, giustificando l'investimento computazionale con una capacità di inpainting e ricostruzione strutturale che i metodi tradizionali non possono eguagliare.
+\end{itemize}

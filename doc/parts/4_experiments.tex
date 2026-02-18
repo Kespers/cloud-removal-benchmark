@@ -1,0 +1,249 @@
+\chapter{Experiments}
+
+Si affrontano le seguenti fasi:
+\begin{itemize}
+    \item Implementazioni baseline
+    \item Inferenza DSen2-CR
+\end{itemize}
+
+\subsection{Creazione della Ground Truth}
+
+A causa delle limitazioni dell'hardware locale gli esperimenti sono stati migrati su \textbf{Google Colab}.
+
+Non potendo disporre di un target nativamente esente da nuvole. Come indicano gli autori del paper \cite{sen12mscrts} è necessario l'uso del modello \textit{s2cloudless} \cite{s2cloudless}. Quest'ultimo genera una maschera binaria i cui pixel assumono valori nell'insieme $\{0, 1\}$, indicando rispettivamente le aree prive di copertura nuvolosa e quelle coperte da nuvole.
+
+l'algoritmo ha esaminato tutti i 30 \textit{timestep} di ciascuna porzione spaziale, isolando il riferimento ottimale e salvando i risultati come segue:
+
+\begin{verbatim}
+"gt_patches": {
+    "1": {
+        "reference_timestep": 2,
+        "cloud_fraction": 0.0,
+        "processing_time": 107.7556
+    },
+    "2": {
+        "reference_timestep": 2,
+        "cloud_fraction": 0.0,
+        "processing_time": 108.7203
+    }
+}
+\end{verbatim}
+
+I metadati registrati per ciascuna patch descrivono metriche fondamentali per la selezione automatica:
+\begin{itemize}
+    \item \textbf{\texttt{reference\_timestep}}: timestemp in cui si trova
+    \item \textbf{\texttt{cloud\_fraction}}: rappresenta il rapporto di copertura nuvolosa calcolato pixel per pixel dal rilevatore. Un valore pari a $0.0$ certifica l'assenza totale di formazioni nuvolose.
+    \item \textbf{\texttt{processing\_time}}: riporta il tempo computazionale (espresso in secondi.
+\end{itemize}
+
+\subsection{Metodi}
+
+\subsubsection{Least Cloudy}
+L'approccio di base più semplice
+\begin{itemize}
+    \item Data una patch analizza tutti i giorni a meno di quello GT.
+    \item Tra le patch rimanenti, il metodo seleziona quella con la minore copertura nuvolosa usando \textit{s2cloudless} \cite{s2cloudless}.
+\end{itemize}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
+        \textbf{Lati positivi} & \textbf{Lati negativi} \\ \hline
+        \begin{itemize}
+            \item Estrema semplicità di implementazione.
+            \item Costo computazionale molto basso.
+            \item Nessuna necessità di addestramento.
+            \item I pixel selezionati sono reali e non sintetizzati.
+        \end{itemize}
+        &
+        \begin{itemize}
+            \item Forte dipendenza da acquisizioni storiche limpide.
+            \item Fallisce se tutte le patch temporali presentano nuvole.
+            \item Ignora totalmente i dati radar (S1) e il contesto spaziale.
+            \item Rischio di forti incongruenze stagionali rispetto alla GT.
+        \end{itemize}
+    \end{tabular}
+    %\caption{Confronto tra lati positivi e negativi del metodo "Least Cloudy".}
+    %\label{tab:least_cloudy_pros_cons}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/least_ex.png}
+    \caption{Metodo Least Cloudy}
+    \label{fig:leastcloudex}
+\end{figure}
+
+\FloatBarrier
+
+\subsubsection{Mosaicing}
+Si lavora sul valore del pixel nel tempo:
+\begin{itemize}
+    \item Se esiste una singola acquisizione senza nuvole nel tempo, il suo valore viene copiato direttamente.
+    \item Se esistono più acquisizioni senza nuvole, viene calcolata la media aritmetica dei loro valori.
+    \item Se non esiste alcuna acquisizione limpida nella serie temporale, viene assegnato un valore fisso pari a 0.5 come \textit{proxy}. Questo passaggio previene l'inclusione di valori di intensità estremi dovuti alla presenza di nuvole spesse.
+\end{itemize}
+
+\begin{table}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
+        \hline
+        \textbf{Lati Positivi} & \textbf{Lati Negativi} \\
+        \hline
+        \textbullet~Sfrutta le informazioni condivise su più frame temporali. & \textbullet~Produce un effetto di sfocatura (\textit{blur}) dovuto all'operazione di media. \\
+        \textbullet~Riduce il rumore casuale grazie alla media aritmetica. & \textbullet~Assegna un valore fittizio (0.5) in caso di copertura nuvolosa perenne. \\
+        \textbullet~Computazionalmente leggero e non richiede addestramento. & \textbullet~Ignora S1 \\
+        \hline
+    \end{tabular}
+    \caption{Lati positivi e negativi del metodo Mosaicing.}
+    \label{tab:mosaicing_pros_cons}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/mosaicingex.png}
+    \caption{Metodo Mosaicing}
+    \label{fig:mosaicingex}
+\end{figure}
+
+\FloatBarrier
+
+\subsubsection{DSen2-CR \cite{MERANER2020333}}
+
+Viene fatto uso di residual network (ResNet). Queste si basano sull'utilizzo di connessioni dirette, chiamate "scorciatoie" (shortcut), che saltano alcuni strati computazionali per trasportare le informazioni verso le parti inferiori della rete.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Images/resnet.png}
+    \caption{ResNet: Le connessioni di salto permettono di trasportare l'informazione direttamente all'output, mentre gli strati intermedi imparano a calcolare una correzione additiva (residuo) da applicare all'input.}
+    \label{fig:resnet}
+\end{figure}
+
+\FloatBarrier
+
+Questo comportamento è cruciale, potremmo avere infatti:
+\begin{itemize}
+    \item \textbf{Nuvole sottili / velature:} la rete apprende piccole correzioni additive.
+    \item \textbf{Cielo sereno:} il long skip trasferisce l'input direttamente.
+    \item \textbf{Quasi tutto coperto (nuvole spesse/estese):} il modello sfrutta i segnali SAR e il contesto spaziale per ricostruire pattern strutturali.
+\end{itemize}
+
+\FloatBarrier
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/dsen_arch.png}
+    \caption{DSen2-CR model}
+    \label{fig:dsenarch}
+\end{figure}
+
+\vspace{1em}
+\subsubsection*{Hardware e Setup di Inferenza}
+
+Non è stato possibile eseguire l'inferenza su servizi cloud come Google Colab. Il tempo di compilazione del piano gratuito era esaurito. 
+
+L'esecuzione è stata quindi spostata su hardware locale più potente di quello personale:
+\begin{itemize}
+    \item CPU Intel Core i7
+    \item Scheda video integrata
+    \item 32 GB di RAM
+\end{itemize} 
+
+Il limite principale è stato proprio la scheda video integrata. Mancando il supporto CUDA, non è stata possibile l'accelerazione hardware.
+
+L'obiettivo iniziale era processare l'intero dataset preso in esame (asiaWest). Tuttavia, la stima dei tempi superava le 40 ore. Il dataset di valutazione è stato quindi ridimensionato. L'analisi è stata limitata alle prime \textbf{50 patch}, per un totale di circa \textbf{1450 immagini}. Questa mole di dati ha comunque richiesto \textbf{oltre 6 ore} di elaborazione parallela.
+
+\vspace{1em}
+\subsubsection*{Analisi dei Risultati e Selezione dell'Immagine}
+
+Al termine dell'inferenza, i dati generati sono stati organizzati nella seguente struttura:
+
+\begin{verbatim}
+output/
+├── 0/
+│   ├── 1.tif
+│   ├── 2.tif
+│   ├── ...
+│   └── 30.tif
+├── 2/
+├── ...
+└── 49/
+\end{verbatim}
+
+
+Per ogni patch erano disponibili circa 29 immagini. È stata effettuata una selezione automatizzata per trovare il miglior risultato di rimozione nuvolosa. Tramite la libreria \texttt{s2cloudless}, è stata calcolata la copertura nuvolosa residua. L'immagine finale scelta è stata quella con la minore frazione di nuvole (\textit{Least Cloudy}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/resnetex.png}
+    \caption{Metodo DSen2-CR}
+    \label{fig:resnetex}
+\end{figure}
+
+\vspace{1em}
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
+        \textbf{Lati positivi} & \textbf{Lati negativi} \\ \hline
+        \begin{itemize}
+            \item Elevata robustezza a nuvole ampie e spesse.
+            \item I dati radar (S1) ripristinano la struttura del suolo.
+            \item La loss adattiva (LCARL) riduce gli artefatti.
+            \item Preserva i dettagli originali nelle zone serene.
+        \end{itemize}
+        &
+        \begin{itemize}
+            \item Fatica a ricostruire trame urbane complesse.
+            \item Non sfrutta al massimo i dati temporali
+        \end{itemize}
+    \end{tabular}
+    %\caption{Confronto tra lati positivi e negativi dell'architettura DSen2-CR.}
+    %\label{tab:dsen2_pros_cons}
+\end{table}
+
+\FloatBarrier
+
+
+\subsubsection{SOTA: UnCRtainTS \cite{UnCRtainTS}}
+
+Attualmente questo è il modello state-of-the-art (SOTA) per la task di cloud removal seq2point
+
+
+\begin{figure}[h]
+    \centering
+    % INSERISCI QUI L'IMMAGINE: Usa la "Figure 2" del paper, che mostra il diagramma a blocchi del modello (Encoder -> Temporal aggregation -> Decoder).
+    \includegraphics[width=1\textwidth]{Images/uncrtaints_model.png}
+    \caption{Architettura UnCRtainTS}
+    \label{fig:uncrtaints_arch}
+\end{figure}
+
+\FloatBarrier
+\begin{figure}[h]
+    \centering
+    % INSERISCI QUI L'IMMAGINE: Usa un ritaglio della "Figure 1" o della "Figure 4", focalizzandoti sulle "Uncertainty maps" colorate in rosso/blu vicino alle immagini reali.
+    \includegraphics[width=0.8\textwidth]{Images/uncrtain_ex.png}
+    \caption{Immagini esemplari di UnCRtainTS}
+    \label{fig:uncrtaints_uncert}
+\end{figure}
+\FloatBarrier
+
+\vspace{1em}
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
+        \textbf{Lati positivi} & \textbf{Lati negativi} \\ \hline
+        \begin{itemize}
+            \item Produce mappe di incertezza calibrate che permettono all'utente di scartare o filtrare le ricostruzioni inaffidabili.
+            \item Preserva in modo eccellente i dettagli e la struttura spaziale non ricorrendo al downsampling.
+            \item Rete molto leggera e parametro-efficiente (solo 0.5M di parametri).
+        \end{itemize}
+        &
+        \begin{itemize}
+            \item Oneroso computazionalmente
+            \item Sensibile a fenomeni naturali (es. spuma onde della costa)
+            \item Difficoltà su serie temporali brevi o singola immagine
+        \end{itemize}
+    \end{tabular}
+    %\caption{Confronto tra lati positivi e negativi dell'architettura UnCRtainTS.}
+    %\label{tab:uncrtaints_pros_cons}
+\end{table}

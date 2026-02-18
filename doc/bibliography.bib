@@ -1,4 +1,37 @@
-@ONLINE{iplab,
-title = {IPLab, 2015.},
-howpublished = {\url{http://iplab.dmi.unict.it/}}
+@article{sen12mscrts,
+        title = {{SEN12MS-CR-TS: A Remote Sensing Data Set for Multi-modal Multi-temporal Cloud Removal}},
+        author = {Ebel, Patrick and Xu, Yajin and Schmitt, Michael and Zhu, Xiao Xiang},
+        journal = {IEEE Transactions on Geoscience and Remote Sensing},
+        year = {2022},
+        publisher = {IEEE}
+} 
+@article{MERANER2020333,
+title = {Cloud removal in Sentinel-2 imagery using a deep residual neural network and SAR-optical data fusion},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {166},
+pages = {333-346},
+year = {2020},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2020.05.013},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271620301398},
+author = {Andrea Meraner and Patrick Ebel and Xiao Xiang Zhu and Michael Schmitt},
+keywords = {Cloud removal, Optical imagery, SAR-optical, Data fusion, Deep learning, Residual network},
+abstract = {Optical remote sensing imagery is at the core of many Earth observation activities. The regular, consistent and global-scale nature of the satellite data is exploited in many applications, such as cropland monitoring, climate change assessment, land-cover and land-use classification, and disaster assessment. However, one main problem severely affects the temporal and spatial availability of surface observations, namely cloud cover. The task of removing clouds from optical images has been subject of studies since decades. The advent of the Big Data era in satellite remote sensing opens new possibilities for tackling the problem using powerful data-driven deep learning methods. In this paper, a deep residual neural network architecture is designed to remove clouds from multispectral Sentinel-2 imagery. SAR-optical data fusion is used to exploit the synergistic properties of the two imaging systems to guide the image reconstruction. Additionally, a novel cloud-adaptive loss is proposed to maximize the retainment of original information. The network is trained and tested on a globally sampled dataset comprising real cloudy and cloud-free images. The proposed setup allows to remove even optically thick clouds by reconstructing an optical representation of the underlying land surface structure.}
+}
+@inproceedings{UnCRtainTS,
+        title = {{UnCRtainTS: Uncertainty Quantification for Cloud Removal in Optical Satellite Time Series}},
+        author = {Ebel, Patrick and Garnot, Vivien Sainte Fare and Schmitt, Michael and Wegner, Jan and Zhu, Xiao Xiang},
+        booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops},
+        year = {2023},
+        organization = {IEEE},
+        url = {"https://openaccess.thecvf.com/content/CVPR2023W/EarthVision/papers/Ebel_UnCRtainTS_Uncertainty_Quantification_for_Cloud_Removal_in_Optical_Satellite_Time_CVPRW_2023_paper.pdf"}
+} 
+@software{s2cloudless,
+  author       = {{Sinergise}},
+  title        = {s2cloudless: Sentinel-2 Cloud Detector},
+  year         = {2026}, 
+  publisher    = {GitHub},
+  journal      = {GitHub repository},
+  howpublished = {\url{https://github.com/sentinel-hub/sentinel2-cloud-detector}},
+  note         = {Python package for cloud masking}
 }

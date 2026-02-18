@@ -1,0 +1,84 @@
+\chapter{Dataset: SEN12MS-CR-TS\cite{sen12mscrts}}
+\label{chap:dataset}
+
+Si tratta di un benchmark pubblico su larga scala, curato dai ricercatori della Technical University of Munich (TUM), progettato specificamente per sviluppare algoritmi di ricostruzione di immagini satellitari e rimozione delle nuvole.
+
+\section{Caratteristiche e Composizione}
+Il dataset è definito "multi-modale" in quanto fornisce, per ogni area geografica, dati provenienti da due diverse costellazioni satellitari del programma europeo Copernicus, perfettamente allineati spazialmente:
+
+\begin{itemize}
+    \item \textbf{Sentinel-1 (Radar):} Funziona come un "radar" che attraversa le nuvole e la pioggia. Non scatta una foto a colori, ma rileva la forma e la consistenza del terreno, fornendo un'immagine sempre nitida anche con il brutto tempo.
+    \item \textbf{Sentinel-2 (Ottico):} Funziona come una normale fotocamera. Scatta foto a colori molto dettagliate, ma viene bloccato dalle nuvole: se il cielo è coperto, l'immagine mostra solo bianco.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/sentinel1.png}
+    \caption{Funzionamento Sentinel-1}
+    \label{fig:radar_penetration}
+\end{figure}
+
+Le immagini sono fornite in patch (ritagli) di dimensione $256 \times 256$ pixel, con una risoluzione al suolo di 10 metri per pixel.
+
+Il dataset completo è accessibile pubblicamente tramite i repository della TU Munich:
+\begin{itemize}
+    \item \textbf{Training Split:} \url{https://mediatum.ub.tum.de/1639953}
+    \item \textbf{Test Split:} \url{https://mediatum.ub.tum.de/1659251}
+\end{itemize}
+
+\section{Copertura Globale e Struttura Temporale}
+Il dataset copre diverse regioni del globo distribuite su tutti i continenti, includendo una vasta variabilità di biomi (foreste, deserti, aree urbane, ghiacci) e stagioni (inverno, estate, stagioni delle piogge).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/dataset_places.png}
+    \caption{Distribuzione globale delle patch del dataset SEN12MS-CR-TS. In blu sono presenti le aree relative al training split, mentre in verde quelle del test split.}
+    \label{fig:dataset_map}
+\end{figure}
+
+La caratteristica distintiva della versione "TS" (\textit{Time Series}) è la dimensione temporale. Per ogni singola patch (ROI - Region of Interest), il dataset fornisce una sequenza di \textbf{30 acquisizioni} scattate in momenti diversi.
+
+\section{Struttura}
+I file seguono la seguente struttura:
+\begin{itemize}
+    \item \textbf{Dominio del Sensore (\texttt{S1} / \texttt{S2})}: Il primo livello distingue la tipologia di sensore usato
+    \item \textbf{Area Geografica (\texttt{ROIs[ID]})}: posizione geografica (Region of Interest)
+    \item \textbf{Dimensione Temporale (\texttt{0} -- \texttt{29})}: Le 30 cartelle numerate corrispondono ai diversi \textit{timestep}; ciascuna contiene un'acquisizione della stessa area in un istante temporale distinto, permettendo di analizzare l'evoluzione delle nuvole e della superficie.
+    \item \textbf{Frammentazione Spaziale (\textit{Patch})}: Rilevazioni identificate da un numero progressivo (es. \texttt{patch\_0}, \texttt{patch\_1}, ..., \texttt{patch\_299}).
+\end{itemize}
+
+Di seguito una rappresentazione
+\begin{verbatim}
+    dataset/
+    ├── s1_asiaWest_test/ROIs1868/100/S1/
+        ├─── 0/   (Cartella del timestep 0)
+        │    ├── s1_ROIs1868_100_ImgNo_0_2018-01-03_patch_0.tif
+        │    └── ...
+        │    └── s1_ROIs1868_100_ImgNo_0_2018-01-03_patch_299.tif
+        ├─── .../
+        └─── 29
+    └── s2_asiaWest_test/ROIs1868/100/S2/
+        └── ...
+\end{verbatim}
+
+\section{Sottoinsieme di studio: AsiaWest}
+Il dataset completo occupa diversi Terabyte, dimensione eccessiva per il lavoro che andremo ad effettuare. Per questo motivo è stata scelta la ROI \textbf{asiaWest\_test}, in quanto è la più leggera tra quelle disponibili (circa \textbf{24,8 GB}) e permette di lavorare in tempi ragionevoli pur offrendo una buona varietà di paesaggi e nuvole. Questo gruppo di dati è stato poi diviso per gli esperimenti: l'80\% delle immagini è stato usato per istruire il modello, mentre il restante 20\% è servito per testare la qualità dei risultati ottenuti.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/ex_asiawest1.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/ex_asiawest2.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/ex_asiawest3.png}
+    \end{subfigure}
+    \caption{Patch presenti in asiawest rilevate con Sentinel-2}
+    \label{fig:asiawest_example}
+\end{figure}
