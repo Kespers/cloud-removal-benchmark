@@ -1,0 +1,202 @@
+{
+    "0": {
+        "best_date": "3",
+        "min_cloud_prob": 7.580480450997129e-05
+    },
+    "1": {
+        "best_date": "17",
+        "min_cloud_prob": 7.742797606624663e-05
+    },
+    "10": {
+        "best_date": "3",
+        "min_cloud_prob": 7.751607336103916e-05
+    },
+    "11": {
+        "best_date": "3",
+        "min_cloud_prob": 7.707301847403869e-05
+    },
+    "12": {
+        "best_date": "3",
+        "min_cloud_prob": 7.764220936223865e-05
+    },
+    "13": {
+        "best_date": "3",
+        "min_cloud_prob": 7.333642861340195e-05
+    },
+    "14": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00012161851191194728
+    },
+    "15": {
+        "best_date": "29",
+        "min_cloud_prob": 0.0001033122098306194
+    },
+    "16": {
+        "best_date": "26",
+        "min_cloud_prob": 0.000117926683742553
+    },
+    "17": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00011771585559472442
+    },
+    "18": {
+        "best_date": "10",
+        "min_cloud_prob": 0.0001801249891286716
+    },
+    "19": {
+        "best_date": "27",
+        "min_cloud_prob": 0.015367788262665272
+    },
+    "2": {
+        "best_date": "17",
+        "min_cloud_prob": 6.746110011590645e-05
+    },
+    "20": {
+        "best_date": "17",
+        "min_cloud_prob": 8.240688475780189e-05
+    },
+    "21": {
+        "best_date": "17",
+        "min_cloud_prob": 7.241427374538034e-05
+    },
+    "22": {
+        "best_date": "17",
+        "min_cloud_prob": 0.00010210544860456139
+    },
+    "23": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00011789242853410542
+    },
+    "24": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00011989162157988176
+    },
+    "25": {
+        "best_date": "26",
+        "min_cloud_prob": 0.0001113702601287514
+    },
+    "26": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010855111759155989
+    },
+    "27": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010392601689090952
+    },
+    "28": {
+        "best_date": "26",
+        "min_cloud_prob": 9.910934022627771e-05
+    },
+    "29": {
+        "best_date": "26",
+        "min_cloud_prob": 0.0001010423366096802
+    },
+    "3": {
+        "best_date": "17",
+        "min_cloud_prob": 7.831285620341077e-05
+    },
+    "30": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010756204574136063
+    },
+    "31": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010756570554804057
+    },
+    "32": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00011153961531817913
+    },
+    "33": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010869842662941664
+    },
+    "34": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010723625018727034
+    },
+    "35": {
+        "best_date": "26",
+        "min_cloud_prob": 0.0001700598222669214
+    },
+    "36": {
+        "best_date": "26",
+        "min_cloud_prob": 0.0021347219590097666
+    },
+    "37": {
+        "best_date": "1",
+        "min_cloud_prob": 0.03823292255401611
+    },
+    "38": {
+        "best_date": "1",
+        "min_cloud_prob": 0.04636342078447342
+    },
+    "39": {
+        "best_date": "13",
+        "min_cloud_prob": 0.032436106353998184
+    },
+    "4": {
+        "best_date": "3",
+        "min_cloud_prob": 0.00011115611414425075
+    },
+    "40": {
+        "best_date": "28",
+        "min_cloud_prob": 8.810011058812961e-05
+    },
+    "41": {
+        "best_date": "17",
+        "min_cloud_prob": 0.002620917512103915
+    },
+    "42": {
+        "best_date": "18",
+        "min_cloud_prob": 0.01053689606487751
+    },
+    "43": {
+        "best_date": "18",
+        "min_cloud_prob": 0.00857781246304512
+    },
+    "44": {
+        "best_date": "18",
+        "min_cloud_prob": 0.012352069839835167
+    },
+    "45": {
+        "best_date": "18",
+        "min_cloud_prob": 0.012156365439295769
+    },
+    "46": {
+        "best_date": "6",
+        "min_cloud_prob": 0.007122702430933714
+    },
+    "47": {
+        "best_date": "10",
+        "min_cloud_prob": 0.013063926249742508
+    },
+    "48": {
+        "best_date": "6",
+        "min_cloud_prob": 0.004692370537668467
+    },
+    "49": {
+        "best_date": "9",
+        "min_cloud_prob": 0.0004934907192364335
+    },
+    "5": {
+        "best_date": "26",
+        "min_cloud_prob": 0.00010921119246631861
+    },
+    "6": {
+        "best_date": "3",
+        "min_cloud_prob": 0.00011106439342256635
+    },
+    "7": {
+        "best_date": "3",
+        "min_cloud_prob": 0.00018852774519473314
+    },
+    "8": {
+        "best_date": "3",
+        "min_cloud_prob": 0.00011473402264527977
+    },
+    "9": {
+        "best_date": "3",
+        "min_cloud_prob": 9.237474296241999e-05
+    }
+}

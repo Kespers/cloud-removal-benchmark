@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  dsen2cr:
+    build: .
+    container_name: dsen2cr_container
+    volumes:
+      - ./dsen2-cr-main:/app
+      - ./dataset:/dataset
+    tty: true
+    stdin_open: true
