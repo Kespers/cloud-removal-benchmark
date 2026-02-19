@@ -53,9 +53,18 @@ python evaluation/metrics.py
 ```
 *Output: Report dettagliato in `evaluation/metrics_report.csv`.*
 
-### D. Visualizzazione dei Risultati
-Lancia un'interfaccia grafica interattiva per confrontare visivamente le predizioni con la Ground Truth.
-
+## Visualizzazione dei dati
+Lancia i seguenti script per avere una visualizzazione del dataset.
 ```bash
-python evaluation/visualizer_app.py
+pip install rasterio numpy matplotlib
+```
+
+Visione totale per ogni patch:
+```bash
+python utils/total-satellite_visualizer.py
+```
+
+Visione granulare:
+```bash
+python utils/total-satellite_visualizer.py
 ```
